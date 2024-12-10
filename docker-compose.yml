@@ -1,0 +1,116 @@
+services:
+  microservice-config:
+    container_name: microservice-config
+    build: ./microservice-config
+    #image: jorgequilla/backend-microservice-config
+    ports:
+      - "8888:8888"
+
+  microservice-eureka:
+    container_name: microservice-eureka
+    build: ./microservice-eureka
+    #image: jorgequilla/backend-microservice-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+
+  microservice-gateway:
+    container_name: microservice-gateway
+    build: ./microservice-gateway
+    #image: jorgequilla/backend-microservice-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+      - microservice-eureka
+
+  authentication-service:
+    container_name: authentication-service
+    build: ./microservice.authentication
+    #image: jorgequilla/backend-authentication-service
+    ports:
+      - "9090:9090"
+    environment:
+      DB_URL_MSVC_AUTH: ${DB_URL_MSVC_AUTH}
+      DB_USERNAME_MSVC_AUTH: ${DB_USERNAME_MSVC_AUTH}
+      DB_PASSWORD_MSVC_AUTH: ${DB_PASSWORD_MSVC_AUTH}
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+      - microservice-eureka
+
+  microservice-notification:
+    container_name: microservice-notification
+    build: ./microservice-notification
+    #image: jorgequilla/backend-microservice-notification
+    ports:
+      - "8105:8105"
+    environment:
+      DB_URL_MSVC_NOTIFICATION: ${DB_URL_MSVC_NOTIFICATION}
+      DB_USERNAME_MSVC_NOTIFICATION: ${DB_USERNAME_MSVC_NOTIFICATION}
+      DB_PASSWORD_MSVC_NOTIFICATION: ${DB_PASSWORD_MSVC_NOTIFICATION}
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+      - microservice-eureka
+
+  microservice-profile:
+    container_name: microservice-profile
+    build: ./microservice-profile
+    #image: jorgequilla/backend-microservice-profile
+    ports:
+      - "8095:8095"
+    environment:
+      DB_URL_MSVC_PROFILE: ${DB_URL_MSVC_PROFILE}
+      DB_USERNAME_MSVC_PROFILE: ${DB_USERNAME_MSVC_PROFILE}
+      DB_PASSWORD_MSVC_PROFILE: ${DB_PASSWORD_MSVC_PROFILE}
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+      - microservice-eureka
+
+  microservice-promos:
+    container_name: microservice-promos
+    build: ./microservice-promos
+    #image: jorgequilla/backend-microservice-promos
+    ports:
+      - "8100:8100"
+    environment:
+      DB_URL_MSVC_PROMOS: ${DB_URL_MSVC_PROMOS}
+      DB_USERNAME_MSVC_PROMOS: ${DB_USERNAME_MSVC_PROMOS}
+      DB_PASSWORD_MSVC_PROMOS: ${DB_PASSWORD_MSVC_PROMOS}
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+      - microservice-eureka
+
+  microservice-trips:
+    container_name: microservice-trips
+    build: ./microservice-trips
+    #image: jorgequilla/backend-microservice-trips
+    ports:
+      - "8090:8090"
+    environment:
+      DB_URL_MSVC_TRIPS: ${DB_URL_MSVC_TRIPS}
+      DB_USERNAME_MSVC_TRIPS: ${DB_USERNAME_MSVC_TRIPS}
+      DB_PASSWORD_MSVC_TRIPS: ${DB_PASSWORD_MSVC_TRIPS}
+      CONFIG_SERVER: http://microservice-config:8888
+      #CONFIG_SERVER: https://trackmyrouteapp.agreeabledesert-f5d3b170.brazilsouth.azurecontainerapps.io:8888
+    depends_on:
+      - microservice-config
+      - microservice-eureka
+
+networks:
+  trackmyroutered:
+    driver: bridge

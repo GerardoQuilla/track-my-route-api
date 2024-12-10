@@ -1,0 +1,26 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: trips-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL_MSVC_TRIPS}
+    username: ${DB_USERNAME_MSVC_TRIPS}
+    password: ${DB_PASSWORD_MSVC_TRIPS}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: com.innovatech.trips.microservicetrips.shared.infrastructure.persistence.jpa.configuration.strategy.SnakeCaseWithPluralizedTablePhysicalNamingStrategy
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
